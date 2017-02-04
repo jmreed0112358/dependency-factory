@@ -1,0 +1,14 @@
+{
+  "name": "dependency-factory",
+  "version": "0.0.1",
+  "description": "A factory to generate dependencies.",
+  "main": "main.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha tests/*.spec.js"
+  },
+  "author": "Jeremy M. Reed",
+  "license": "MIT"
+}
