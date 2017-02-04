@@ -10,5 +10,9 @@
     "test": "mocha tests/*.spec.js"
   },
   "author": "Jeremy M. Reed",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^3.5.0"
+  }
 }
