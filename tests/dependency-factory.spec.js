@@ -1,6 +1,7 @@
 'use strict';
 
 const DependencyFactory = require('../src/dependency-factory'),
+  Test = require('../src/test-module'),
   chai = require('chai'),
   expect = chai.expect;
 
@@ -62,6 +63,22 @@ describe('DependencyFactory', function() {
       validator = factory.getDependency('validator');
 
       expect(validator.isEmail('foo@bar.com')).to.equal(true);
+      done();
+    });
+
+    it('should get a local constructor dependency with args correctly', function(done) {
+      var factory = new DependencyFactory(),
+        test = null;
+
+      factory.registerDependency('Test', '../src/test-module', 'constructor');
+
+      expect(factory.isDependencyRegistered('Test')).to.equal(true);
+
+      test = factory.getDependency('Test', ['foo', 'bar']);
+
+      expect(test instanceof Test).to.equal(true);
+      expect(test.getArg1()).to.equal('foo');
+      expect(test.getArg2()).to.equal('bar');
       done();
     });
   });
