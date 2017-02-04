@@ -10,7 +10,7 @@ describe('DependencyFactory', function() {
     it('should register dependencies correctly', function(done) {
       var factory = new DependencyFactory();
 
-      factory.registerDependency('foo', 'foo');
+      factory.registerDependency('foo', 'foo', 'object');
 
       expect(factory.isDependencyRegistered('foo')).to.equal(true);
       done();
@@ -21,7 +21,7 @@ describe('DependencyFactory', function() {
 
       expect(function () {
         factory.registerDependency(42, 'foo');
-      }).to.throw('Invalid types for depName and/or depPath');
+      }).to.throw('Invalid types for depName, depPath, and/or depType');
       done();
     });
 
@@ -30,33 +30,32 @@ describe('DependencyFactory', function() {
 
       expect(function () {
         factory.registerDependency('foo', 42);
-      }).to.throw('Invalid types for depName and/or depPath');
+      }).to.throw('Invalid types for depName, depPath, and/or depType');
       done();
     });
   });
 
   describe('getDependency()', function() {
-    it('should get a local dependency correctly', function(done) {
+    it('should get a local constructor dependency correctly', function(done) {
       var factory = new DependencyFactory(),
         Factory = null,
         test = null;
 
-      factory.registerDependency('DependencyFactory', '../src/dependency-factory');
+      factory.registerDependency('DependencyFactory', '../src/dependency-factory', 'constructor');
 
       expect(factory.isDependencyRegistered('DependencyFactory')).to.equal(true);
 
-      Factory = factory.getDependency('DependencyFactory');
-      test = new Factory();
+      test = factory.getDependency('DependencyFactory');
 
-      expect(test instanceof Factory).to.equal(true);
+      expect(test instanceof DependencyFactory).to.equal(true);
       done();
     });
 
-    it('should get a npm installed dependency correctly', function(done) {
+    it('should get a npm installed object dependency correctly', function(done) {
       var factory = new DependencyFactory(),
         validator = null;
 
-      factory.registerDependency('validator', 'validator');
+      factory.registerDependency('validator', 'validator', 'object');
 
       expect(factory.isDependencyRegistered('validator')).to.equal(true);
 
