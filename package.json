@@ -11,7 +11,9 @@
   },
   "author": "Jeremy M. Reed",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "validator": "^6.2.1"
+  },
   "devDependencies": {
     "chai": "^3.5.0"
   }
