@@ -35,4 +35,35 @@ describe('DependencyFactory', function() {
     });
   });
 
+  describe('getDependency()', function() {
+    it('should get a local dependency correctly', function(done) {
+      var factory = new DependencyFactory(),
+        Factory = null,
+        test = null;
+
+      factory.registerDependency('DependencyFactory', '../src/dependency-factory');
+
+      expect(factory.isDependencyRegistered('DependencyFactory')).to.equal(true);
+
+      Factory = factory.getDependency('DependencyFactory');
+      test = new Factory();
+
+      expect(test instanceof Factory).to.equal(true);
+      done();
+    });
+
+    it('should get a npm installed dependency correctly', function(done) {
+      var factory = new DependencyFactory(),
+        validator = null;
+
+      factory.registerDependency('validator', 'validator');
+
+      expect(factory.isDependencyRegistered('validator')).to.equal(true);
+
+      validator = factory.getDependency('validator');
+
+      expect(validator.isEmail('foo@bar.com')).to.equal(true);
+      done();
+    });
+  });
 }); 

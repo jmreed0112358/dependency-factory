@@ -22,4 +22,12 @@ DependencyFactory.prototype.isDependencyRegistered = function (depName) {
   return registry[depName] !== undefined;
 };
 
+DependencyFactory.prototype.getDependency = function (depName) {
+  if (registry[depName]) {
+    let dependency = registry[depName];
+
+    return require(dependency.path);
+  }
+}
+
 module.exports = DependencyFactory;
