@@ -29,6 +29,25 @@ DependencyFactory.prototype.registerDependency = function (depName, depPath, dep
   }
 };
 
+DependencyFactory.prototype.unregisterDependency = function (depName) {
+  if (typeof depName !== 'string') {
+    throw new Error('Invalid type for depName');
+  }
+
+  if (this.registry[depName] !== undefined) {
+    this.registry[depName] = null;
+    delete this.registry[depName];
+  }
+};
+
+DependencyFactory.prototype.unregisterAllDependencies = function () {
+  let keys = Object.keys(this.registry);
+
+  for (let i = 0 ; i < keys.length ; i++) {
+    this.unregisterDependency(keys[i]);
+  }
+};
+
 DependencyFactory.prototype.registerMock = function(depName, mock) {
   if (typeof depName !== 'string' || typeof mock !== 'object') {
     throw new Error('Invalid types for depName and/or mock');

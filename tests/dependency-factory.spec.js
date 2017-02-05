@@ -36,6 +36,56 @@ describe('DependencyFactory', function() {
     });
   });
 
+  describe('unregisterDependency()', function () {
+    it('should correctly unregister a dependency', function (done) {
+      let factory = new DependencyFactory();
+
+      factory.registerDependency('foo', 'foo', 'object');
+
+      expect(factory.isDependencyRegistered('foo')).to.equal(true);
+
+      factory.unregisterDependency('foo');
+
+      expect(factory.isDependencyRegistered('foo')).to.equal(false);
+
+      done();
+    });
+
+    it('should throw error when depName is not a string', function (done) {
+      let factory = new DependencyFactory();
+
+      factory.registerDependency('foo', 'foo', 'object');
+
+      expect(function () {
+        factory.unregisterDependency(99, 'foo', 'object');
+      }).to.throw('Invalid type for depName');
+
+      done();
+    });
+  });
+
+  describe('unregisterAllDependencies()', function () {
+    it('should correctly unregister all dependencies', function (done) {
+      let factory = new DependencyFactory();
+
+      factory.registerDependency('foo', 'foo', 'object');
+      factory.registerDependency('bar', 'foo', 'object');
+      factory.registerDependency('foo-bar', 'foo', 'object');
+
+      expect(factory.isDependencyRegistered('foo')).to.equal(true);
+      expect(factory.isDependencyRegistered('bar')).to.equal(true);
+      expect(factory.isDependencyRegistered('foo-bar')).to.equal(true);
+
+      factory.unregisterAllDependencies();
+
+      expect(factory.isDependencyRegistered('foo')).to.equal(false);
+      expect(factory.isDependencyRegistered('bar')).to.equal(false);
+      expect(factory.isDependencyRegistered('foo-bar')).to.equal(false);
+
+      done();
+    });
+  });
+
   describe('getDependency()', function() {
     it('should get a local constructor dependency correctly', function(done) {
       let factory = new DependencyFactory(),
