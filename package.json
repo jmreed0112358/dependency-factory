@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "A factory to generate dependencies.",
   "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmreed0112358/dependency-factory"
+  },
   "directories": {
     "test": "tests"
   },
