@@ -1,5 +1,5 @@
 {
-  "name": "dependency-factory",
+  "name": "DependencyFactory",
   "version": "0.0.1",
   "description": "A factory to generate dependencies.",
   "main": "main.js",
