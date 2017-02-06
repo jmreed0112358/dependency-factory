@@ -30,7 +30,7 @@ var DependencyFactory = require('dependency-factory'),
 
 At first, the factory does not know about any dependences, we must register them before doing anything.
 
-Keep in mind that the registery internally is shared among all instances of the dependency factory.  All instances of the dependency factory will know about all registered
+Keep in mind that the registery internally is shared among all instances of the dependency factory.  All instances of the dependency factory will know about all registered dependencies.
 
 ### Registering dependencies.
 To register a dependency, we give the factory a name, a path, and a type.
