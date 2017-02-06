@@ -59,6 +59,12 @@ To unregister ALL dependencies from the factory.
 factory.unregisterAllDependencies();
 ````
 
+### Getting dependencies.
+To get an instance of a dependency (foo):
+```` javascript
+var foo = factory.getDependency('foo');
+````
+
 ### Mocking.
 You can register mocks for specific dependencies using this factory.  Mocks can be plain objects decorated with whatever paramaters you want the mock to have.
 
