@@ -24,7 +24,7 @@ npm test
 ### Usage.
 First require the package, and create a new instance.
 ```` javascript
-var DependencyFactory = require('DependencyFactory'),
+var DependencyFactory = require('dependency-factory'),
   factory = new DependencyFactory();
 ````
 
