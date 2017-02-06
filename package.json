@@ -2,7 +2,7 @@
   "name": "dependency-factory",
   "version": "0.0.2",
   "description": "A factory to generate dependencies.",
-  "main": "main.js",
+  "main": "src/dependency-factory.js',
   "repository": {
     "type": "git",
     "url": "https://github.com/jmreed0112358/dependency-factory"
