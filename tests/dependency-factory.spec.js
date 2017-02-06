@@ -7,6 +7,7 @@ const DependencyFactory = require('../src/dependency-factory'),
 
 
 describe('DependencyFactory', function() {
+
   describe('registerDependency()', function() {
     it('should register dependencies correctly', function(done) {
       let factory = new DependencyFactory();
@@ -14,6 +15,9 @@ describe('DependencyFactory', function() {
       factory.registerDependency('foo', 'foo', 'object');
 
       expect(factory.isDependencyRegistered('foo')).to.equal(true);
+
+      factory.unregisterAllDependencies();
+
       done();
     });
 
@@ -23,6 +27,9 @@ describe('DependencyFactory', function() {
       expect(function () {
         factory.registerDependency(42, 'foo');
       }).to.throw('Invalid types for depName, depPath, and/or depType');
+
+      factory.unregisterAllDependencies();
+
       done();
     });
 
@@ -32,6 +39,9 @@ describe('DependencyFactory', function() {
       expect(function () {
         factory.registerDependency('foo', 42);
       }).to.throw('Invalid types for depName, depPath, and/or depType');
+
+      factory.unregisterAllDependencies();
+
       done();
     });
   });
@@ -48,6 +58,8 @@ describe('DependencyFactory', function() {
 
       expect(factory.isDependencyRegistered('foo')).to.equal(false);
 
+      factory.unregisterAllDependencies();
+
       done();
     });
 
@@ -59,6 +71,8 @@ describe('DependencyFactory', function() {
       expect(function () {
         factory.unregisterDependency(99, 'foo', 'object');
       }).to.throw('Invalid type for depName');
+
+      factory.unregisterAllDependencies();
 
       done();
     });
@@ -82,6 +96,8 @@ describe('DependencyFactory', function() {
       expect(factory.isDependencyRegistered('bar')).to.equal(false);
       expect(factory.isDependencyRegistered('foo-bar')).to.equal(false);
 
+      factory.unregisterAllDependencies();
+
       done();
     });
   });
@@ -99,6 +115,9 @@ describe('DependencyFactory', function() {
       test = factory.getDependency('DependencyFactory');
 
       expect(test instanceof DependencyFactory).to.equal(true);
+
+      factory.unregisterAllDependencies();
+
       done();
     });
 
@@ -113,6 +132,9 @@ describe('DependencyFactory', function() {
       validator = factory.getDependency('validator');
 
       expect(validator.isEmail('foo@bar.com')).to.equal(true);
+
+      factory.unregisterAllDependencies();
+
       done();
     });
 
@@ -129,6 +151,9 @@ describe('DependencyFactory', function() {
       expect(test instanceof Test).to.equal(true);
       expect(test.getArg1()).to.equal('foo');
       expect(test.getArg2()).to.equal('bar');
+
+      factory.unregisterAllDependencies();
+
       done();
     });
   });
@@ -155,6 +180,9 @@ describe('DependencyFactory', function() {
       test = factory.getDependency('Test', ['foo', 'bar']);
 
       expect(test.thing).to.equal('something');
+
+      factory.unregisterAllDependencies();
+
       done();
     });
 
@@ -170,7 +198,9 @@ describe('DependencyFactory', function() {
         factory.registerMock(99, {
           thing: 'something'
         });
-      }).to.throw('Invalid types for depName and/or mock')
+      }).to.throw('Invalid types for depName and/or mock');
+
+      factory.unregisterAllDependencies();
       
       done();
     });
@@ -185,7 +215,9 @@ describe('DependencyFactory', function() {
 
       expect(function() {
         factory.registerMock('Test', 'foo');
-      }).to.throw('Invalid types for depName and/or mock')
+      }).to.throw('Invalid types for depName and/or mock');
+
+      factory.unregisterAllDependencies();
       
       done();
     });
@@ -200,7 +232,9 @@ describe('DependencyFactory', function() {
         factory.registerMock('Test', {
           thing: 'other'
         });
-      }).to.throw('The dependency must be registered before it can be mocked')
+      }).to.throw('The dependency must be registered before it can be mocked');
+
+      factory.unregisterAllDependencies();
       
       done();
     });
@@ -237,6 +271,8 @@ describe('DependencyFactory', function() {
       expect(test.getArg1()).to.equal('foo');
       expect(test.getArg2()).to.equal('bar');
 
+      factory.unregisterAllDependencies();
+
       done();
     });
 
@@ -264,7 +300,9 @@ describe('DependencyFactory', function() {
 
       expect(function() {
         factory.unregisterMock(99);
-      }).to.throw('Invalid type for depName')
+      }).to.throw('Invalid type for depName');
+
+      factory.unregisterAllDependencies();
 
       done();
     });
@@ -275,8 +313,10 @@ describe('DependencyFactory', function() {
 
       expect(function() {
         factory.unregisterMock('Test');
-      }).to.throw('Either the dependency is not registered, or there is no registered mock')
+      }).to.throw('Either the dependency is not registered, or there is no registered mock');
       
+      factory.unregisterAllDependencies();
+
       done();
     });
 
@@ -296,7 +336,60 @@ describe('DependencyFactory', function() {
 
       expect(function() {
         factory.unregisterMock('Test');
-      }).to.throw('Either the dependency is not registered, or there is no registered mock')
+      }).to.throw('Either the dependency is not registered, or there is no registered mock');
+
+      factory.unregisterAllDependencies();
+
+      done();
+    });
+  });
+
+  describe('global registry', function() {
+    it('should share dependencies among multiple instances of the dependency factory', function (done) {
+      let factoryOne = new DependencyFactory(),
+        factoryTwo = new DependencyFactory();
+
+      factoryOne.registerDependency('foo', 'foo', 'object');
+
+      expect(factoryOne.isDependencyRegistered('foo')).to.equal(true);
+      expect(factoryTwo.isDependencyRegistered('foo')).to.equal(true);
+
+      factoryOne.unregisterAllDependencies();
+      factoryTwo.unregisterAllDependencies();
+
+      done();
+    });
+
+    it('should share dependencies, even if a factory is created after the dependency is registered', function (done) {
+      let factoryOne = new DependencyFactory();
+
+      factoryOne.registerDependency('foo', 'foo', 'object');
+
+      expect(factoryOne.isDependencyRegistered('foo')).to.equal(true);
+
+      let factoryTwo = new DependencyFactory();
+
+      expect(factoryTwo.isDependencyRegistered('foo')).to.equal(true);
+
+      factoryOne.unregisterAllDependencies();
+      factoryTwo.unregisterAllDependencies();
+
+      done();
+    });
+
+    it('should unregister all dependencies for all instances of the dependency factory', function (done) {
+      let factoryOne = new DependencyFactory(),
+        factoryTwo = new DependencyFactory();
+
+      factoryOne.registerDependency('foo', 'foo', 'object');
+
+      expect(factoryOne.isDependencyRegistered('foo')).to.equal(true);
+      expect(factoryTwo.isDependencyRegistered('foo')).to.equal(true);
+
+      factoryOne.unregisterAllDependencies();
+
+      expect(factoryOne.isDependencyRegistered('foo')).to.equal(false);
+      expect(factoryTwo.isDependencyRegistered('foo')).to.equal(false);
 
       done();
     });

@@ -1,7 +1,7 @@
 'use strict';
 
-var DependencyFactory = function () {
-  this.registry = {};
+var registry = {},
+  DependencyFactory = function () {
 };
 
 /*
@@ -18,8 +18,8 @@ DependencyFactory.prototype.registerDependency = function (depName, depPath, dep
     throw new Error('Invalid types for depName, depPath, and/or depType');
   }
 
-  if (this.registry[depName] === undefined) {
-    this.registry[depName] = {
+  if (registry[depName] === undefined) {
+    registry[depName] = {
       name: depName,
       type: depType,
       path: depPath,
@@ -34,14 +34,14 @@ DependencyFactory.prototype.unregisterDependency = function (depName) {
     throw new Error('Invalid type for depName');
   }
 
-  if (this.registry[depName] !== undefined) {
-    this.registry[depName] = null;
-    delete this.registry[depName];
+  if (registry[depName] !== undefined) {
+    registry[depName] = null;
+    delete registry[depName];
   }
 };
 
 DependencyFactory.prototype.unregisterAllDependencies = function () {
-  let keys = Object.keys(this.registry);
+  let keys = Object.keys(registry);
 
   for (let i = 0 ; i < keys.length ; i++) {
     this.unregisterDependency(keys[i]);
@@ -53,9 +53,9 @@ DependencyFactory.prototype.registerMock = function(depName, mock) {
     throw new Error('Invalid types for depName and/or mock');
   }
 
-  if (this.registry[depName] !== undefined) {
-    this.registry[depName].isMock = true;
-    this.registry[depName].mock = mock;
+  if (registry[depName] !== undefined) {
+    registry[depName].isMock = true;
+    registry[depName].mock = mock;
   } else {
     throw new Error('The dependency must be registered before it can be mocked');
   }
@@ -66,21 +66,21 @@ DependencyFactory.prototype.unregisterMock = function(depName) {
     throw new Error('Invalid type for depName');
   }
 
-  if (this.registry[depName] !== undefined && this.registry[depName].isMock) {
-    this.registry[depName].isMock = false;
-    this.registry[depName].mock = null;
+  if (registry[depName] !== undefined && registry[depName].isMock) {
+    registry[depName].isMock = false;
+    registry[depName].mock = null;
   } else {
     throw new Error('Either the dependency is not registered, or there is no registered mock');
   }
 };
 
 DependencyFactory.prototype.isDependencyRegistered = function (depName) {
-  return this.registry[depName] !== undefined;
+  return registry[depName] !== undefined;
 };
 
 DependencyFactory.prototype.getDependency = function (depName, args) {
-  if (this.registry[depName]) {
-    let dependency = this.registry[depName];
+  if (registry[depName]) {
+    let dependency = registry[depName];
 
     if (dependency.isMock) {
       return dependency.mock;
@@ -105,6 +105,10 @@ DependencyFactory.prototype.getDependency = function (depName, args) {
 // Taken from user123444555621's answer.
 DependencyFactory.prototype.callConstructor = function (constructor, args) {
   return new (Function.prototype.bind.apply(constructor, [null].concat(args)));
+};
+
+DependencyFactory.prototype.printRegistry = function () {
+  console.log(registry);
 };
 
 module.exports = DependencyFactory;
