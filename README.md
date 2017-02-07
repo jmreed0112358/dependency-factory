@@ -68,7 +68,7 @@ var foo = factory.getDependency('foo');
 To get an instance of an constructor dependency (Bar) with arguments:
 (internally, the factory will create the object for you via new, and pass in arguments to the constructor.)
 ```` javascript
-var bar = factory.getDependency('Bar', ['arg1', arg2']);
+var bar = factory.getDependency('Bar', ['arg1', 'arg2']);
 ````
 
 ### Mocking.
