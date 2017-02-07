@@ -1,7 +1,8 @@
 'use strict';
 
-const DependencyFactory = require('../src/dependency-factory'),
-  Test = require('../src/test-module'),
+const path = require('path'), 
+  DependencyFactory = require(path.resolve('src/dependency-factory')),
+  Test = require(path.resolve('src/test-module')),
   chai = require('chai'),
   expect = chai.expect;
 
@@ -108,7 +109,27 @@ describe('DependencyFactory', function() {
         Factory = null,
         test = null;
 
-      factory.registerDependency('DependencyFactory', '../src/dependency-factory', 'constructor');
+      factory.registerDependency('DependencyFactory', path.resolve('src/dependency-factory'), 'constructor');
+
+      expect(factory.isDependencyRegistered('DependencyFactory')).to.equal(true);
+
+      test = factory.getDependency('DependencyFactory');
+
+      expect(test instanceof DependencyFactory).to.equal(true);
+
+      factory.unregisterAllDependencies();
+
+      done();
+    });
+
+    it('should use path.resolve when getting a local constructor dependency correctly', function(done) {
+      let factory = new DependencyFactory(),
+        Factory = null,
+        test = null;
+
+      console.log('process.cwd(): ' + process.cwd());
+
+      factory.registerDependency('DependencyFactory', path.resolve('src/dependency-factory'), 'constructor');
 
       expect(factory.isDependencyRegistered('DependencyFactory')).to.equal(true);
 
