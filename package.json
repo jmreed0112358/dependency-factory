@@ -1,6 +1,6 @@
 {
   "name": "dependency-factory",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A factory to generate dependencies.",
   "main": "src/dependency-factory.js",
   "repository": {
