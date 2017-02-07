@@ -38,9 +38,11 @@ To register a dependency, we give the factory a name, a path, and a type.
 2. path: For dependencies installed via npm, this is just the package name.  For local modules, this will be a path to the module.  In other words, this is the string you'd be passing to require().
 3. type: The factory can handle plain exported objects, or constructors to be used with the new keyword.  For the former, use 'object', for the latter, use 'constructor'.  All other values are ignored and will produce errors when getting the dependency from the factory.
 
+note: For local dependencies, you want to give an absolute path, so if your path isn't already an absolute path, use path.resolve().
+
 For a dependency called foo, located at '../src/foo', exporting a plain object:
 ```` javascript
-factory.registerDependency('foo', '../src/foo', 'object');
+factory.registerDependency('foo', path.resolve('../src/foo'), 'object');
 ````
 
 For a dependency called bar, npm package name 'Bar', with a constructor used with new:
